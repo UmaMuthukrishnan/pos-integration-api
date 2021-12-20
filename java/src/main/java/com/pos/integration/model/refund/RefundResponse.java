@@ -1,13 +1,18 @@
 package com.pos.integration.model.refund;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class RefundResponse {
 
-    private Boolean isSuccess;
-    private String resultCode;
-    private String resultMessage;
-    private String bankReferenceNumber;
-    private String rawResponse;
+    private final Boolean isSuccess;
+    private final String resultCode;
+    private final String resultMessage;
+    private final String bankReferenceNumber;
+    private final String rawResponse;
 
+    @Builder
     public RefundResponse(Boolean isSuccess, String resultCode, String resultMessage, String bankReferenceNumber, String rawResponse) {
         this.isSuccess = isSuccess;
         this.resultCode = resultCode;
@@ -18,41 +23,5 @@ public class RefundResponse {
 
     public Boolean getSuccess() {
         return isSuccess;
-    }
-
-    public void setSuccess(Boolean success) {
-        isSuccess = success;
-    }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public String getResultMessage() {
-        return resultMessage;
-    }
-
-    public void setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
-    }
-
-    public String getBankReferenceNumber() {
-        return bankReferenceNumber;
-    }
-
-    public void setBankReferenceNumber(String bankReferenceNumber) {
-        this.bankReferenceNumber = bankReferenceNumber;
-    }
-
-    public String getRawResponse() {
-        return rawResponse;
-    }
-
-    public void setRawResponse(String rawResponse) {
-        this.rawResponse = rawResponse;
     }
 }

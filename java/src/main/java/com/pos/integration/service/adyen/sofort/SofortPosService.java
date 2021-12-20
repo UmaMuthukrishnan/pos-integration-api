@@ -10,28 +10,31 @@ import com.pos.integration.model.redirect_url.RedirectUrlResponse;
 import com.pos.integration.model.refund.RefundRequest;
 import com.pos.integration.model.refund.RefundResponse;
 import com.pos.integration.service.adyen.model.AdyenRefundResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pos.integration.service.client.RestClient;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class SofortPosService implements PosService {
 
-    private final String SERVICE_URL = "https://www.adyen.com/api/v1";
+    private final RestClient restClient;
 
-    @Autowired
-    private RestTemplate rt;
+    @Value("${sofort.refundUrl}")
+    private String refundUrl;
+
+    @Value("${sofort.redirectionUrl}")
+    private String redirectionUrl;
+
 
     @Override
     public RefundResponse refund(RefundRequest request) throws PosException {
-
         try {
-            PostResponse<AdyenRefundResponse> postResponse = post(SERVICE_URL + "/refund", request, new ParameterizedTypeReference<PostResponse<AdyenRefundResponse>>() {});
-            AdyenRefundResponse response = postResponse.getResponse();
+            final PostResponse<AdyenRefundResponse> postResponse = restClient.post(refundUrl, request, new ParameterizedTypeReference<>() {
+            });
+            final AdyenRefundResponse response = postResponse.getResponse();
             return new RefundResponse(
                     response.isSuccess(),
                     response.getErrorCode(),
@@ -53,17 +56,11 @@ public class SofortPosService implements PosService {
     public RedirectUrlResponse fetchRedirectionUrl(RedirectUrlRequest request) throws PosException {
 
         try {
-            PostResponse<RedirectUrlResponse> postResponse = post(SERVICE_URL + "/redirection/url", request, new ParameterizedTypeReference<PostResponse<RedirectUrlResponse>>() {});
-            return new RedirectUrlResponse( postResponse.getResponse().getUrl(), postResponse.getResponse().getRawBody() );
+            final PostResponse<RedirectUrlResponse> postResponse = restClient.post(redirectionUrl, request, new ParameterizedTypeReference<>() {
+            });
+            return new RedirectUrlResponse(postResponse.getResponse().getUrl(), postResponse.getResponse().getRawBody());
         } catch (Exception e) {
             throw new PosException(String.format("Error occurred when getting payment redirect url for sofort, ReferenceId:%s. Message: %s", request.getReferenceNumber(), e.getMessage()), e);
         }
-    }
-
-    private <T> PostResponse<T> post(String url, Object request, ParameterizedTypeReference<PostResponse<T>> typeReference) {
-
-        HttpEntity<Object> httpEntity = new HttpEntity<Object>(request);
-        ResponseEntity<PostResponse<T>> response = rt.exchange(url, HttpMethod.POST, httpEntity, typeReference);
-        return response.getBody();
     }
 }

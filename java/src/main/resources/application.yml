@@ -1,0 +1,11 @@
+sofort :
+  refundUrl : https://www.adyen.com/api/v1/refund
+  redirectionUrl : https://www.adyen.com/api/v1/redirection/url
+
+est :
+  refundUrl : https://www.est.com/pos/api/v1/refund
+  authUrl : https://www.est.com/pos/api/v1/auth
+
+tyBank :
+  refundUrl : https://www.tybank.com/pos/api/v1/tybank/refund
+  authUrl : https://www.tybank.com/pos/api/v1/tybank/auth

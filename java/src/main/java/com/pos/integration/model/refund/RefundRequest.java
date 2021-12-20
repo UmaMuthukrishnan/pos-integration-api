@@ -2,47 +2,19 @@ package com.pos.integration.model.refund;
 
 import com.pos.integration.model.common.Currency;
 import com.pos.integration.model.common.PosCredential;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 
+@Getter
+@Builder
 public class RefundRequest {
 
-    private PosCredential posCredential;
+    private final PosCredential posCredential;
 
-    private BigDecimal amount;
-    private Currency currency;
-    private String refundReferenceNumber;
-
-    public PosCredential getPosCredential() {
-        return posCredential;
-    }
-
-    public void setPosCredential(PosCredential posCredential) {
-        this.posCredential = posCredential;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public String getRefundReferenceNumber() {
-        return refundReferenceNumber;
-    }
-
-    public void setRefundReferenceNumber(String refundReferenceNumber) {
-        this.refundReferenceNumber = refundReferenceNumber;
-    }
+    private final BigDecimal amount;
+    private final Currency currency;
+    private final String refundReferenceNumber;
 }

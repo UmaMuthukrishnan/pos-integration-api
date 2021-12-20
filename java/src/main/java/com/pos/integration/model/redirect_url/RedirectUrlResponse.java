@@ -1,28 +1,17 @@
 package com.pos.integration.model.redirect_url;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class RedirectUrlResponse {
 
-    private String url;
-    private String rawBody;
+    private final String url;
+    private final String rawBody;
 
-    public RedirectUrlResponse(String url, String rawBody) {
+    @Builder
+    public RedirectUrlResponse(final String url, final String rawBody) {
         this.url = url;
-        this.rawBody = rawBody;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getRawBody() {
-        return rawBody;
-    }
-
-    public void setRawBody(String rawBody) {
         this.rawBody = rawBody;
     }
 }

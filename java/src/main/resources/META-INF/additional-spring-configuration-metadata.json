@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "tybank-refund-url",
+      "type": "java.lang.String",
+      "description": "Description for tybank-refund-url."
+    },
+    {
+      "name": "tybank-auth-url",
+      "type": "java.lang.String",
+      "description": "Description for tybank-auth-url."
+    }
+  ] }

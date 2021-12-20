@@ -9,43 +9,59 @@ import com.pos.integration.model.refund.RefundRequest;
 import com.pos.integration.model.refund.RefundResponse;
 import com.pos.integration.service.adyen.sofort.SofortPosService;
 import com.pos.integration.service.est.EstPosService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.pos.integration.service.tybank.TyBankPosService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
+
 @RestController
 @RequestMapping("/makePayment")
+@RequiredArgsConstructor
 public class PosIntegrationController {
 
-    @Autowired
-    private SofortPosService sofortPosService;
+    private final SofortPosService sofortPosService;
 
-    @Autowired
-    private EstPosService estPosService;
+    private final EstPosService estPosService;
+
+    private final TyBankPosService tyBankPosService;
 
 
     @PostMapping("/getRedirectionUrlWithAdyenSofort")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(ACCEPTED)
     public ResponseEntity<RedirectUrlResponse> fetchRedirectionUrlWithAdyenSofort(@RequestBody RedirectUrlRequest request) throws PosException {
         return ResponseEntity.ok(sofortPosService.fetchRedirectionUrl(request));
     }
 
-    @PostMapping("/refundWithAdyenSofort")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping(value = "/refundWithAdyenSofort",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(ACCEPTED)
     public ResponseEntity<RefundResponse> refundWithAdyenSofort(@RequestBody RefundRequest request) throws PosException {
         return ResponseEntity.ok(sofortPosService.refund(request));
     }
 
     @PostMapping("/authWithEst")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(ACCEPTED)
     public ResponseEntity<AuthResponse> authWithEst(@RequestBody AuthRequest request) throws PosException {
         return ResponseEntity.ok(estPosService.auth(request));
     }
 
     @PostMapping("/refundWithEst")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(ACCEPTED)
     public ResponseEntity<RefundResponse> refundWithEst(@RequestBody RefundRequest request) throws PosException {
         return ResponseEntity.ok(estPosService.refund(request));
+    }
+
+    @PostMapping("/refundWithTyBank")
+    @ResponseStatus(ACCEPTED)
+    public ResponseEntity<RefundResponse> refundWithTyBank( @RequestBody RefundRequest request) throws  PosException {
+        return ResponseEntity.ok(tyBankPosService.refund(request));
+    }
+
+    @PostMapping("/authWithTyBank")
+    @ResponseStatus(ACCEPTED)
+    public ResponseEntity<AuthResponse> authWithTyBank(@RequestBody AuthRequest request) throws PosException {
+        return ResponseEntity.ok(tyBankPosService.auth(request));
     }
 }
